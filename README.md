@@ -30,4 +30,21 @@ A full-featured movie catalog and management application including:
 - Tables created: Movies, Genres, Actors
 - Initial seed data inserted (2 movies, 4 genres)
 
-EF Core journey has officially begun!
+## Day 2: Advanced Modeling – Relationships (1-1, 1-M, M-M)
+
+**Completed Today:**
+- Added new entities: Studio, MovieDetail
+- Implemented real-world relationships:
+  - One-to-Many: Movie → Studio (with SetNull on delete)
+  - Many-to-Many: Movie ↔ Genre (junction table MovieGenres)
+  - Many-to-Many: Movie ↔ Actor (junction table MovieActors)
+  - One-to-One: Movie → MovieDetail (shared primary key)
+- Configured all relationships using Fluent API
+- Updated seed data to include relationships
+- Generated and applied new migration
+- Verified schema and data in PostgreSQL
+
+**Database Updates:**
+- New tables: Studios, MovieGenres, MovieActors, MovieDetails
+- Proper foreign keys and cascade behaviors
+- Seed data with connected entities

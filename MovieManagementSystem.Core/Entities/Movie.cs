@@ -18,5 +18,16 @@ public class Movie
 
     public int DurationMinutes { get; set; }
 
-    // Navigation properties will be added later
+    // One-to-Many: a movie belongs to one studio
+    public int StudioId { get; set; }
+    public Studio Studio { get; set; } = null!;
+
+    // Many-to-Many: a movie has multiple genres
+    public List<Genre> Genres { get; set; } = new();
+
+    // Many-to-Many: a movie has multiple actors
+    public List<Actor> Actors { get; set; } = new();
+
+    // One-to-One: a movie has one additional detail
+    public MovieDetail MovieDetail { get; set; } = null!;
 }
