@@ -1,1 +1,9 @@
-<Solution />
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="MovieManagementSystem.Api/MovieManagementSystem.Api.csproj" />
+  <Project Path="MovieManagementSystem.Core/MovieManagementSystem.Core.csproj" />
+  <Project Path="MovieManagementSystem.Infrastructure/MovieManagementSystem.Infrastructure.csproj" />
+  <Project Path="MovieManagementSystem.Tests/MovieManagementSystem.Tests.csproj" />
+</Solution>
