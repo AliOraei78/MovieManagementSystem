@@ -87,3 +87,21 @@ A full-featured movie catalog and management application including:
 - TPT: Better normalization, cleaner data, but requires JOINs
 - TPC: Fast reads, no JOINs, but data duplication and complex writes
 - Choice depends on query patterns and data access needs
+
+## Day 5: Advanced Migrations
+
+**Completed Today:**
+- Complex seed data with relationships (Many-to-Many via HasData)
+- Custom SQL in migrations (indexes, functions, triggers)
+- Created trigram index for fuzzy search
+- Implemented PostgreSQL function and trigger for rating average
+- Idempotent SQL with IF NOT EXISTS / CREATE OR REPLACE
+- Migration rollback testing
+- Production migration best practices (script generation, dry-run)
+
+**Key Learnings:**
+- HasData for complex relationships (junction tables)
+- Raw SQL for PostgreSQL-specific features
+- Triggers and functions in migrations
+- Safe rollback and production deployment strategies
+- Generating SQL scripts for DBA review

@@ -157,9 +157,28 @@ public class AppDbContext : DbContext
 
         // Updated seed data
         modelBuilder.Entity<Studio>().HasData(
-            new Studio { Id = 1, Name = "Warner Bros.", Country = "USA", FoundedYear = 1923 },
-            new Studio { Id = 2, Name = "Universal Pictures", Country = "USA", FoundedYear = 1912 }
+            new Studio
+            {
+                Id = 1,
+                Name = "Warner Bros.",
+                Country = "USA",
+                FoundedYear = 1923
+            },
+            new Studio
+            {
+                Id = 2,
+                Name = "Universal Pictures",
+                Country = "USA",
+                FoundedYear = 1912
+            }
         );
+
+        modelBuilder.Entity<Genre>().HasData(
+            new Genre { Id = 1, Name = "Action" },
+            new Genre { Id = 2, Name = "Drama" },
+            new Genre { Id = 3, Name = "Sci-Fi" },
+            new Genre { Id = 4, Name = "Comedy" }
+            );
 
         // Updated Movie seed with relationships
         modelBuilder.Entity<Movie>().HasData(
@@ -203,5 +222,16 @@ public class AppDbContext : DbContext
                 Revenue = 463500000m
             }
         );
+
+        // Many-to-Many seed (Movie-Genre)
+        modelBuilder.Entity<Movie>()
+            .HasMany(m => m.Genres)
+            .WithMany(g => g.Movies)
+            .UsingEntity(j => j.HasData(
+                new { MoviesId = 1, GenresId = 3 },  // Inception - Sci-Fi
+                new { MoviesId = 1, GenresId = 1 },  // Inception - Action
+                new { MoviesId = 2, GenresId = 3 },  // Matrix - Sci-Fi
+                new { MoviesId = 2, GenresId = 1 }   // Matrix - Action
+            ));
     }
 }
