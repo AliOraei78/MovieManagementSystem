@@ -15,5 +15,5 @@ public class Actor
     public string? Biography { get; set; }
 
     // Navigation property
-    public List<Movie> Movies { get; set; } = new();
+    public virtual List<Movie> Movies { get; set; } = new();
 }

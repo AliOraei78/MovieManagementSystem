@@ -123,3 +123,22 @@ A full-featured movie catalog and management application including:
 - Prefer property-level IsModified for secure updates
 - Change Tracker is powerful but can hurt performance if not managed
 - Use Clear() or AsNoTracking for large read operations
+
+## Day 7: Advanced Querying
+
+**Completed Today:**
+- Eager Loading with Include and ThenInclude
+- Explicit Loading for on-demand related data
+- Projection with Select to prevent over-fetching and N+1
+- Split Queries for better performance with complex includes
+- Demonstration of Lazy Loading risks (N+1 problem)
+- Best practices:
+  - Prefer Projection over full entity loading in APIs
+  - Use AsSplitQuery for many includes
+  - Avoid Lazy Loading in web applications
+
+**Key Learnings:**
+- Eager: Load everything upfront (good for known needs)
+- Explicit: Load when needed (fine-grained control)
+- Projection: Best for APIs (minimal data transfer)
+- Split Query: Prevents performance issues with multiple collections

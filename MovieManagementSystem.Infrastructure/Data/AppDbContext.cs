@@ -50,20 +50,23 @@ public class AppDbContext : DbContext
                   .IsRowVersion()
                   .IsConcurrencyToken();
 
-            // Relationships
+            // Movie → Studio (One-to-Many)
             entity.HasOne(m => m.Studio)
                   .WithMany(s => s.Movies)
                   .HasForeignKey(m => m.StudioId)
                   .OnDelete(DeleteBehavior.SetNull);
 
+            // Movie → Genres (Many-to-Many)
             entity.HasMany(m => m.Genres)
                   .WithMany(g => g.Movies)
                   .UsingEntity(j => j.ToTable("MovieGenres"));
 
+            // Movie → Actors (Many-to-Many)
             entity.HasMany(m => m.Actors)
                   .WithMany(a => a.Movies)
                   .UsingEntity(j => j.ToTable("MovieActors"));
 
+            // Movie → MovieDetail (One-to-One)
             entity.HasOne(m => m.MovieDetail)
                   .WithOne(md => md.Movie)
                   .HasForeignKey<MovieDetail>(md => md.Id);

@@ -15,5 +15,5 @@ public class Studio
     public int FoundedYear { get; set; }
 
     // Navigation property: one studio can have multiple movies
-    public List<Movie> Movies { get; set; } = new();
+    public virtual List<Movie> Movies { get; set; } = new();
 }
