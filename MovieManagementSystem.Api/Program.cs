@@ -1,5 +1,6 @@
-using MovieManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using MovieManagementSystem.Core.Entities;
+using MovieManagementSystem.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,132 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+// For testing the Change Tracker only – remove later
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+Console.WriteLine("=== Testing EF Core Change Tracker ===\n");
+/*
+// 1. Added – when a new entity is added
+var newMovie = new Movie
+{
+    Title = "Test Movie - Change Tracker",
+    Description = "This movie is created only for testing",
+    ReleaseDate = DateTime.UtcNow,
+    Rating = 7.5m,
+    DurationMinutes = 120,
+    StudioId = 1  // Assume a studio with Id = 1 exists
+};
+
+context.Movies.Add(newMovie);
+Console.WriteLine($"1. After Add: State = {context.Entry(newMovie).State}");
+// Output: Added
+
+await context.SaveChangesAsync();  // Now OK because Main is async
+Console.WriteLine($"   After SaveChanges: State = {context.Entry(newMovie).State}\n");
+// Output: Unchanged
+
+// 2. Modified – when an existing entity is changed
+var existingMovie = await context.Movies.FindAsync(1);  // Inception movie
+if (existingMovie != null)
+{
+    existingMovie.Rating = 9.9m;  // Change value
+    Console.WriteLine($"2. After changing Rating: State = {context.Entry(existingMovie).State}");
+    // Output: Modified
+
+    // SaveChanges has not been called yet – the change is only tracked
+}
+
+// 3. Deleted – when an entity is removed
+if (existingMovie != null)
+{
+    context.Movies.Remove(existingMovie);
+    Console.WriteLine($"3. After Remove: State = {context.Entry(existingMovie).State}\n");
+    // Output: Deleted
+}
+
+// 4. Detached – entity not tracked by the context
+var detachedMovie = new Movie
+{
+    Id = 999,
+    Title = "This movie is not tracked"
+};
+
+Console.WriteLine($"4. Entity not attached to context: State = {context.Entry(detachedMovie).State}");
+// Output: Detached
+*/
+/*
+var movies = await context.Movies
+    .AsNoTracking()
+    .Where(m => m.Rating > 8)
+    .ToListAsync();
+
+foreach (var m in movies)
+{
+    Console.WriteLine(context.Entry(m).State);  // Detached
+}
+
+var trackedMovies = await context.Movies
+    .Where(m => m.Rating > 8)
+    .ToListAsync();
+
+foreach (var m in trackedMovies)
+{
+    Console.WriteLine(context.Entry(m).State);  // Unchanged
+}
+*/
+/*
+// Assume this JSON comes from the client
+var updateDto = new { Id = 1, Title = "Updated Title", Rating = 9.9m };
+
+// Bad approach — dangerous over-posting
+// var movie = updateDto.ToMovie();
+// context.Update(movie);  // All fields are updated, even those not sent by the client
+
+// Correct approach — update only allowed fields
+var existingMovie = await context.Movies.FindAsync(updateDto.Id);
+if (existingMovie != null)
+{
+    existingMovie.Title = updateDto.Title;
+    existingMovie.Rating = updateDto.Rating;
+    await context.SaveChangesAsync();
+}
+
+// Advanced approach using Attach (for detached entities)
+var detachedMovie = new Movie
+{
+    Id = updateDto.Id,
+    Title = updateDto.Title,
+    Rating = updateDto.Rating
+};
+
+context.Attach(detachedMovie);
+context.Entry(detachedMovie).Property(m => m.Title).IsModified = true;
+context.Entry(detachedMovie).Property(m => m.Rating).IsModified = true;
+
+await context.SaveChangesAsync();
+
+
+var movieToUpdate = new Movie { Id = 1, Title = "Fast Update", Rating = 10m };
+context.Movies.Update(movieToUpdate);
+context.Entry(movieToUpdate).State = EntityState.Modified;
+*/
+
+// For big queries
+var largeQuery = await context.Movies
+    .AsNoTracking()
+    .Include(m => m.Genres)
+    .ToListAsync();
+
+context.ChangeTracker.Clear();
+
+context.ChangeTracker.DetectChanges();
+Console.WriteLine($"Entities tracked: {context.ChangeTracker.Entries().Count()}");
+
+Console.WriteLine("\n=== Test completed ===");
+Console.WriteLine("To persist changes, call SaveChanges or restart the application.");
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -21,6 +148,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-
-app.Run();
+await app.RunAsync();  // Async Run

@@ -105,3 +105,21 @@ A full-featured movie catalog and management application including:
 - Triggers and functions in migrations
 - Safe rollback and production deployment strategies
 - Generating SQL scripts for DBA review
+
+## Day 6: Change Tracker Deep Dive
+
+**Completed Today:**
+- Explored all entity states: Added, Modified, Unchanged, Deleted, Detached
+- AsNoTracking for read-only queries (performance gain)
+- Attach vs Update vs manual property marking
+- Preventing over-posting in API updates
+- Explicit state management with Entry().State
+- ChangeTracker.Clear() for batch operations
+- DetectChanges and tracking diagnostics
+
+**Key Learnings:**
+- AsNoTracking is essential for GET endpoints
+- Never use Update() on untrusted input (over-posting risk)
+- Prefer property-level IsModified for secure updates
+- Change Tracker is powerful but can hurt performance if not managed
+- Use Clear() or AsNoTracking for large read operations
