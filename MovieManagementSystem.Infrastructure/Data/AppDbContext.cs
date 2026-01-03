@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieManagementSystem.Core.Entities;
+using System;
 
 namespace MovieManagementSystem.Infrastructure.Data;
 
@@ -125,6 +126,34 @@ public class AppDbContext : DbContext
             entity.Property(md => md.Revenue)
                   .HasColumnType("decimal(18,2)");
         });
+
+        // 1. TPH for Person
+        modelBuilder.Entity<Person>()
+            .UseTphMappingStrategy()
+            .HasDiscriminator<string>("PersonType")
+            .HasValue<Member>("Member")
+            .HasValue<Librarian>("Librarian");
+
+        // 2. TPT for Content
+        modelBuilder.Entity<Content>()
+            .UseTptMappingStrategy();
+
+        modelBuilder.Entity<Film>()
+            .ToTable("Films");
+
+        modelBuilder.Entity<Documentary>()
+            .ToTable("Documentaries");
+
+        // 3. TPC for Product
+        modelBuilder.Entity<Product>()
+            .UseTpcMappingStrategy();
+
+        modelBuilder.Entity<Book>()
+            .ToTable("Books");
+
+        modelBuilder.Entity<DigitalBook>()
+            .ToTable("DigitalBooks");
+
 
         // Updated seed data
         modelBuilder.Entity<Studio>().HasData(

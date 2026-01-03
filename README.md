@@ -69,3 +69,21 @@ A full-featured movie catalog and management application including:
 - Better for complex configurations and production applications
 - Indexes and constraints defined explicitly
 - Concurrency token ready for optimistic locking
+
+## Day 4: Inheritance Strategies (TPH, TPT, TPC)
+
+**Completed Today:**
+- Created hierarchical model: Person → Member → Librarian
+- Implemented all three EF Core inheritance strategies:
+  - TPH (Table Per Hierarchy) - single table with discriminator (default)
+  - TPT (Table Per Type) - base table + separate tables for derived types
+  - TPC (Table Per Concrete Type) - separate full table for each concrete class
+- Configured mapping strategies using Fluent API (.NET 8+)
+- Generated and applied migration for selected strategy
+- Analyzed resulting database schema in PostgreSQL
+
+**Key Learnings:**
+- TPH: Best performance, simplest queries, but can lead to sparse tables
+- TPT: Better normalization, cleaner data, but requires JOINs
+- TPC: Fast reads, no JOINs, but data duplication and complex writes
+- Choice depends on query patterns and data access needs
