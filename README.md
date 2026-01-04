@@ -159,3 +159,22 @@ A full-featured movie catalog and management application including:
 - Batch operations reduce round-trips to database
 - Indexes should be defined in Fluent API for control
 - Logging helps identify slow queries
+
+## Day 9: Global Query Filters + Soft Delete + Multi-Tenancy
+
+**Completed Today:**
+- Added ISoftDelete and IHasTenant interfaces
+- Implemented Soft Delete (IsDeleted + DeletedAt) on core entities
+- Implemented Multi-Tenancy (TenantId) on core entities
+- Global Query Filters for:
+  - Automatic soft delete filtering
+  - Tenant isolation (data per tenant)
+- CurrentTenant service for runtime tenant resolution
+- Tested soft delete and tenant filtering in API
+
+**Key Learnings:**
+- Global Query Filters are powerful for cross-cutting concerns
+- Soft Delete prevents data loss and simplifies recovery
+- Multi-Tenancy with filters ensures data isolation
+- Combine filters for secure, clean data access
+- Use scoped service for current tenant in real apps

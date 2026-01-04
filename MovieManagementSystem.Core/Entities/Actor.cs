@@ -14,6 +14,13 @@ public class Actor
 
     public string? Biography { get; set; }
 
+    // Soft Delete
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
+
+    // Multi-Tenancy
+    public int TenantId { get; set; }
+
     // Navigation property
     public List<Movie> Movies { get; set; } = new();
 }

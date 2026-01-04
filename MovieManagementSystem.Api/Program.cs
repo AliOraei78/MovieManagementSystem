@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.OpenApi;
 using MovieManagementSystem.Core.Entities;
 using MovieManagementSystem.Infrastructure.Data;
+using MovieManagementSystem.Infrastructure.Services;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore.Proxies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,10 @@ builder.Services.AddSwaggerGen(c =>
     // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     // c.IncludeXmlComments(xmlPath);
 });
+
+builder.Services.AddScoped<CurrentTenant>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 var app = builder.Build();
 
@@ -196,6 +201,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<MovieManagementSystem.Api.Middleware.TenantMiddleware>();
 
 app.MapControllers();
 

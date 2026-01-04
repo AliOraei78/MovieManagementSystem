@@ -1,14 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieManagementSystem.Core.Entities;
+using MovieManagementSystem.Infrastructure.Services;
 using System;
 
 namespace MovieManagementSystem.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+    private readonly CurrentTenant _currentTenant;
+    public AppDbContext(DbContextOptions<AppDbContext> options, CurrentTenant currentTenant)
+            : base(options)
     {
+        _currentTenant = currentTenant;
     }
 
     public DbSet<Movie> Movies { get; set; } = null!;
@@ -20,6 +23,19 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Global Query Filter for Soft Delete
+        modelBuilder.Entity<Movie>().HasQueryFilter(m => !m.IsDeleted);
+        modelBuilder.Entity<Genre>().HasQueryFilter(g => !g.IsDeleted);
+        modelBuilder.Entity<Actor>().HasQueryFilter(a => !a.IsDeleted);
+        modelBuilder.Entity<Studio>().HasQueryFilter(s => !s.IsDeleted);
+
+        // Global Query Filter for Multi-Tenancy
+        // We assume the current TenantId is obtained from HttpContext or a service
+        modelBuilder.Entity<Movie>().HasQueryFilter(m => m.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Genre>().HasQueryFilter(g => g.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Actor>().HasQueryFilter(a => a.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Studio>().HasQueryFilter(s => s.TenantId == _currentTenant.Id);
 
         // Movie Configuration
         modelBuilder.Entity<Movie>(entity =>
@@ -193,7 +209,8 @@ public class AppDbContext : DbContext
                 ReleaseDate = new DateTime(2010, 7, 16, 0, 0, 0, DateTimeKind.Utc),
                 Rating = 8.8m,
                 DurationMinutes = 148,
-                StudioId = 1
+                StudioId = 1,
+                TenantId = 1
             },
             new Movie
             {
@@ -203,7 +220,8 @@ public class AppDbContext : DbContext
                 ReleaseDate = new DateTime(1999, 3, 31, 0, 0, 0, DateTimeKind.Utc),
                 Rating = 8.7m,
                 DurationMinutes = 136,
-                StudioId = 2
+                StudioId = 2,
+                TenantId = 2
             }
         );
 

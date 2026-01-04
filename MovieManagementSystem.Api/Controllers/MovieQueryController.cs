@@ -159,4 +159,30 @@ public class MovieQueryController : ControllerBase
         return Ok(movie);
     }
 
+    [HttpGet("softdelete-test")]
+    public async Task<IActionResult> SoftDeleteTest()
+    {
+        // Simulate tenant 1
+        var tenantService = HttpContext.RequestServices.GetRequiredService<CurrentTenant>();
+        tenantService.SetTenant(1);
+
+        var movies = await _context.Movies.ToListAsync();
+
+        return Ok(movies);  // Only movies belonging to tenant 1 and not soft-deleted
+    }
+
+    [HttpPost("softdelete/{id}")]
+    public async Task<IActionResult> SoftDeleteMovie(int id)
+    {
+        var movie = await _context.Movies.FindAsync(id);
+        if (movie == null) return NotFound();
+
+        movie.IsDeleted = true;
+        movie.DeletedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return Ok("The movie was soft-deleted successfully");
+    }
+
 }

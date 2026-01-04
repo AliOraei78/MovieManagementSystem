@@ -14,6 +14,13 @@ public class Studio
 
     public int FoundedYear { get; set; }
 
+    // Soft Delete
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
+
+    // Multi-Tenancy
+    public int TenantId { get; set; }
+
     // Navigation property: one studio can have multiple movies
     public List<Movie> Movies { get; set; } = new();
 }

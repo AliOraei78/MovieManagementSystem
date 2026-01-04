@@ -1,6 +1,8 @@
-﻿namespace MovieManagementSystem.Core.Entities;
+﻿using MovieManagementSystem.Core.Interfaces;
 
-public class Movie
+namespace MovieManagementSystem.Core.Entities;
+
+public class Movie : ISoftDelete, IHasTenant
 {
     public int Id { get; set; }
 
@@ -13,6 +15,13 @@ public class Movie
     public decimal Rating { get; set; }
 
     public int DurationMinutes { get; set; }
+
+    // Soft Delete
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
+
+    // Multi-Tenancy
+    public int TenantId { get; set; }
 
     public int StudioId { get; set; }
     public Studio Studio { get; set; } = null!;
