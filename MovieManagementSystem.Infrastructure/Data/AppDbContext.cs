@@ -25,17 +25,12 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Global Query Filter for Soft Delete
-        modelBuilder.Entity<Movie>().HasQueryFilter(m => !m.IsDeleted);
-        modelBuilder.Entity<Genre>().HasQueryFilter(g => !g.IsDeleted);
-        modelBuilder.Entity<Actor>().HasQueryFilter(a => !a.IsDeleted);
-        modelBuilder.Entity<Studio>().HasQueryFilter(s => !s.IsDeleted);
-
         // Global Query Filter for Multi-Tenancy
         // We assume the current TenantId is obtained from HttpContext or a service
-        modelBuilder.Entity<Movie>().HasQueryFilter(m => m.TenantId == _currentTenant.Id);
-        modelBuilder.Entity<Genre>().HasQueryFilter(g => g.TenantId == _currentTenant.Id);
-        modelBuilder.Entity<Actor>().HasQueryFilter(a => a.TenantId == _currentTenant.Id);
-        modelBuilder.Entity<Studio>().HasQueryFilter(s => s.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Movie>().HasQueryFilter(m => !m.IsDeleted && m.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Genre>().HasQueryFilter(g => !g.IsDeleted && g.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Actor>().HasQueryFilter(a => !a.IsDeleted && a.TenantId == _currentTenant.Id);
+        modelBuilder.Entity<Studio>().HasQueryFilter(s => !s.IsDeleted && s.TenantId == _currentTenant.Id);
 
         // Movie Configuration
         modelBuilder.Entity<Movie>(entity =>
