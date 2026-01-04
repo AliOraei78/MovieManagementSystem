@@ -8,5 +8,5 @@ public class Genre
 
     public string? Description { get; set; }
 
-    public virtual List<Movie> Movies { get; set; } = new();
+    public List<Movie> Movies { get; set; } = new();
 }

@@ -17,10 +17,11 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .UseLazyLoadingProxies());
+           .LogTo(Console.WriteLine, LogLevel.Information)  // Log all SQL queries to the console
+           .EnableSensitiveDataLogging()                    // Show parameter values in logs
+           .EnableDetailedErrors());                        // Enable detailed error messages
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();

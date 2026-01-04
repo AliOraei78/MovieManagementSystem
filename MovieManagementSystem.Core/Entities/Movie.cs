@@ -15,12 +15,12 @@ public class Movie
     public int DurationMinutes { get; set; }
 
     public int StudioId { get; set; }
-    public virtual Studio Studio { get; set; } = null!;
+    public Studio Studio { get; set; } = null!;
 
-    public virtual List<Genre> Genres { get; set; } = new();
-    public virtual List<Actor> Actors { get; set; } = new();
+    public List<Genre> Genres { get; set; } = new();
+    public List<Actor> Actors { get; set; } = new();
 
-    public virtual MovieDetail MovieDetail { get; set; } = null!;
+    public MovieDetail MovieDetail { get; set; } = null!;
 
     public byte[] RowVersion { get; set; } = null!;
 }

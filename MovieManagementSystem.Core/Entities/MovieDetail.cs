@@ -13,5 +13,5 @@ public class MovieDetail
     public decimal Revenue { get; set; }
 
     // Navigation property
-    public virtual Movie Movie { get; set; } = null!;
+    public Movie Movie { get; set; } = null!;
 }

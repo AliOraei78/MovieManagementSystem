@@ -142,3 +142,20 @@ A full-featured movie catalog and management application including:
 - Explicit: Load when needed (fine-grained control)
 - Projection: Best for APIs (minimal data transfer)
 - Split Query: Prevents performance issues with multiple collections
+
+## Day 8: Performance Tuning
+
+**Completed Today:**
+- Enabled EF Core detailed logging to console
+- AsNoTracking for read-only queries (memory & speed optimization)
+- Compiled Queries for frequently executed parameterized queries
+- Batch Update/Delete with ExecuteUpdateAsync/ExecuteDeleteAsync
+- Indexing at EF Core level (single, composite, unique, filtered)
+- Performance best practices applied
+
+**Key Learnings:**
+- AsNoTracking is mandatory for GET endpoints
+- Compiled Queries significantly speed up repeated queries
+- Batch operations reduce round-trips to database
+- Indexes should be defined in Fluent API for control
+- Logging helps identify slow queries

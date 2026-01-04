@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MovieManagementSystem.Infrastructure.Data;
 using MovieManagementSystem.Core.Entities;
+using MovieManagementSystem.Infrastructure.Data;
+using MovieManagementSystem.Infrastructure.Services;
 
 namespace MovieManagementSystem.Api.Controllers;
 
@@ -131,6 +132,29 @@ public class MovieQueryController : ControllerBase
         await _context.Entry(movie)
                       .Reference(m => m.Studio)
                       .LoadAsync();
+
+        return Ok(movie);
+    }
+
+    [HttpGet("asnotracking")]
+    public async Task<IActionResult> GetWithAsNoTracking()
+    {
+        var movies = await _context.Movies
+            .AsNoTracking()  // ← مهم: tracking خاموش می‌شود
+            .Include(m => m.Studio)
+            .Include(m => m.Genres)
+            .Include(m => m.Actors)
+            .ToListAsync();
+
+        return Ok(movies);
+    }
+
+    [HttpGet("compiled/{id}")]
+    public async Task<IActionResult> GetMovieCompiled(int id)
+    {
+        var movie = await MovieQueries.GetMovieByIdAsync(_context, id);
+
+        if (movie == null) return NotFound();
 
         return Ok(movie);
     }
