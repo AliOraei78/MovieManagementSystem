@@ -185,4 +185,37 @@ public class MovieQueryController : ControllerBase
         return Ok("The movie was soft-deleted successfully");
     }
 
+    [HttpPost("test-exception")]
+    public async Task<IActionResult> TestException()
+    {
+        var movie = new Movie { Title = "Duplicate Title" };  // Assume Title is unique
+        _context.Movies.Add(movie);
+        await _context.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpPost("bulk-insert")]
+    public async Task<IActionResult> BulkInsert()
+    {
+        var movies = new List<Movie>();
+
+        for (int i = 1; i <= 1000; i++)
+        {
+            movies.Add(new Movie
+            {
+                Title = $"Bulk Movie {i}",
+                ReleaseDate = DateTime.UtcNow,
+                Rating = 7.0m + (i % 30) / 10m,
+                DurationMinutes = 120 + i % 60,
+                StudioId = 1
+            });
+        }
+
+        // Bulk insert using EF Core BulkExtensions or equivalent
+        await _context.BulkInsertAsync(movies);
+
+        return Ok("1000 movies were added via Bulk Insert");
+    }
+
 }

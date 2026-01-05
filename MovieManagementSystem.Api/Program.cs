@@ -1,3 +1,4 @@
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.OpenApi;
@@ -24,7 +25,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information)  // Log all SQL queries to the console
            .EnableSensitiveDataLogging()                    // Show parameter values in logs
            .EnableDetailedErrors()                       // Enable detailed error messages
-           .AddInterceptors(new AuditSaveChangesInterceptor()));
+           .AddInterceptors(new AuditSaveChangesInterceptor())
+           .UseExceptionProcessor());
 
 
 // Add Swagger
@@ -60,7 +62,7 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-
+/*
 Console.WriteLine("=== Testing EF Core Change Tracker ===\n");
 // 1. Added when a new entity is added
 var newMovie = new Movie
@@ -82,7 +84,7 @@ Console.WriteLine($"1. After Add: State = {context.Entry(newMovie).State}");
 await context.SaveChangesAsync();  // Now OK because Main is async
 Console.WriteLine($"   After SaveChanges: State = {context.Entry(newMovie).State}\n");
 // Output: Unchanged
-/*
+
 // 2. Modified when an existing entity is changed
 var existingMovie = await context.Movies.FindAsync(1);  // Inception movie
 if (existingMovie != null)

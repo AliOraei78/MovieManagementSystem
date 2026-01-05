@@ -196,7 +196,21 @@ A full-featured movie catalog and management application including:
 - Perfect for audit trails, logging, or soft-delete automation
 - External transactions can be managed separately
 
-**Next (Day 11):**
-- EF Core Extensions (EF+, Exceptions, etc.)
+## Day 11 - Phase 4: EF Core Extensions
 
-Audit logging complete — every change is now tracked! 📝
+**Completed Today:**
+- Installed and configured three powerful EF Core extensions:
+  - EntityFramework.Exceptions: Human-readable database exceptions (Unique, FK, etc.)
+  - Z.EntityFramework.Extensions: High-performance Bulk Insert/Update/Delete
+  - EF+ (Entity Framework Plus): Query caching and advanced auditing
+- Demonstrated:
+  - Bulk operations with 1000+ records in milliseconds
+  - Clean exception handling for PostgreSQL errors
+  - Query caching with FromCacheAsync
+- Best practices for using extensions in production
+
+**Key Learnings:**
+- Exceptions package makes debugging database errors easy
+- Bulk extensions are essential for large data operations
+- Query cache improves performance for repeated queries
+- Extensions should be used carefully (licensing, compatibility)
