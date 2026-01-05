@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.OpenApi;
 using MovieManagementSystem.Core.Entities;
 using MovieManagementSystem.Infrastructure.Data;
+using MovieManagementSystem.Infrastructure.Interceptors;
 using MovieManagementSystem.Infrastructure.Services;
 using System.Text.Json.Serialization;
 
@@ -22,7 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
            .LogTo(Console.WriteLine, LogLevel.Information)  // Log all SQL queries to the console
            .EnableSensitiveDataLogging()                    // Show parameter values in logs
-           .EnableDetailedErrors());                        // Enable detailed error messages
+           .EnableDetailedErrors()                       // Enable detailed error messages
+           .AddInterceptors(new AuditSaveChangesInterceptor()));
+
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -52,22 +55,24 @@ builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 var app = builder.Build();
 
-/*
+
 // For testing the Change Tracker only remove later
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-*/
-/*
+
+
 Console.WriteLine("=== Testing EF Core Change Tracker ===\n");
 // 1. Added when a new entity is added
 var newMovie = new Movie
 {
-    Title = "Test Movie - Change Tracker",
-    Description = "This movie is created only for testing",
-    ReleaseDate = DateTime.UtcNow,
+    Title = "Test AuditLogs",
+    Description = "This movie is created only for AuditLogs",
+    ReleaseDate = new DateTime(2010, 7, 16, 0, 0, 0, DateTimeKind.Utc),
     Rating = 7.5m,
     DurationMinutes = 120,
-    StudioId = 1  // Assume a studio with Id = 1 exists
+    StudioId = 1,  // Assume a studio with Id = 1 exists
+    Id = 15,
+    TenantId = 1
 };
 
 context.Movies.Add(newMovie);
@@ -77,7 +82,7 @@ Console.WriteLine($"1. After Add: State = {context.Entry(newMovie).State}");
 await context.SaveChangesAsync();  // Now OK because Main is async
 Console.WriteLine($"   After SaveChanges: State = {context.Entry(newMovie).State}\n");
 // Output: Unchanged
-
+/*
 // 2. Modified when an existing entity is changed
 var existingMovie = await context.Movies.FindAsync(1);  // Inception movie
 if (existingMovie != null)

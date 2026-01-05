@@ -178,3 +178,25 @@ A full-featured movie catalog and management application including:
 - Multi-Tenancy with filters ensures data isolation
 - Combine filters for secure, clean data access
 - Use scoped service for current tenant in real apps
+
+## Day 10: Advanced Transactions + SaveChanges Interceptor
+
+**Completed Today:**
+- Created AuditLog entity for tracking changes
+- Implemented SaveChangesInterceptor for automatic auditing
+- Captured Added/Modified/Deleted operations
+- Stored changes as JSON with entity name, ID, user, and timestamp
+- Registered interceptor in DI container
+- Tested full audit trail on movie operations
+
+**Key Learnings:**
+- Interceptors run before/after SaveChanges
+- ChangeTracker.Entries() gives full access to changes
+- JsonSerializer for flexible change storage
+- Perfect for audit trails, logging, or soft-delete automation
+- External transactions can be managed separately
+
+**Next (Day 11):**
+- EF Core Extensions (EF+, Exceptions, etc.)
+
+Audit logging complete — every change is now tracked! 📝

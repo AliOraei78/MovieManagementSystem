@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Actor> Actors { get; set; } = null!;
     public DbSet<Studio> Studios { get; set; } = null!;
     public DbSet<MovieDetail> MovieDetails { get; set; } = null!;
+    public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
