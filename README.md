@@ -214,3 +214,37 @@ A full-featured movie catalog and management application including:
 - Bulk extensions are essential for large data operations
 - Query cache improves performance for repeated queries
 - Extensions should be used carefully (licensing, compatibility)
+
+## Day 12: Testing with EF Core
+
+**Completed Today:**
+- Unit tests with InMemory Database (fast & isolated)
+- SQLite In-Memory tests for more realistic behavior
+- Integration tests with WebApplicationFactory and real HTTP client
+- Proper seeding and cleanup in tests
+- Overriding DbContext in integration tests
+- Assertions on API responses and database state
+
+**Key Learnings:**
+- InMemory: Fast unit tests, no real DB needed
+- SQLite In-Memory: Closer to production behavior
+- WebApplicationFactory: Full API integration testing
+- Always clean up databases between tests
+- Use scoped services for seeding in integration tests
+
+## Day 12 - Phase 4: Testing with EF Core
+
+**Completed Today:**
+- Unit tests with InMemory Database (fast & isolated)
+- SQLite In-Memory tests for more realistic behavior
+- Integration tests with WebApplicationFactory and real HTTP client
+- Proper seeding and cleanup in tests
+- Overriding DbContext in integration tests
+- Assertions on API responses and database state
+
+**Key Learnings:**
+- InMemory: Fast unit tests, no real DB needed
+- SQLite In-Memory: Closer to production behavior
+- WebApplicationFactory: Full API integration testing
+- Always clean up databases between tests
+- Use scoped services for seeding in integration tests

@@ -14,6 +14,12 @@ public class AppDbContext : DbContext
         _currentTenant = currentTenant;
     }
 
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
+    {
+        _currentTenant = new CurrentTenant();
+    }
+
     public DbSet<Movie> Movies { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Actor> Actors { get; set; } = null!;
