@@ -7,7 +7,7 @@ using Xunit;
 
 namespace MovieManagementSystem.Tests;
 
-// یک کانتکست مخصوص تست برای تغییر رفتار در SQLite
+// A test-specific DbContext to change behavior for SQLite
 public class TestAppDbContext : AppDbContext
 {
     public TestAppDbContext(DbContextOptions<AppDbContext> options, CurrentTenant currentTenant)
@@ -17,7 +17,7 @@ public class TestAppDbContext : AppDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // در SQLite فیلد RowVersion را اختیاری می‌کنیم تا خطای NOT NULL ندهد
+        // In SQLite, make the RowVersion field optional to avoid NOT NULL errors
         modelBuilder.Entity<Movie>()
             .Property(m => m.RowVersion)
             .IsRequired(false);
@@ -41,7 +41,7 @@ public class MovieSqliteTests : IDisposable
         var tenant = new CurrentTenant();
         tenant.SetTenant(1);
 
-        // استفاده از کانتکست مخصوص تست
+        // Use the test-specific DbContext
         _context = new TestAppDbContext(options, tenant);
         _context.Database.EnsureCreated();
     }
@@ -49,31 +49,32 @@ public class MovieSqliteTests : IDisposable
     [Fact]
     public async Task SqliteTest_WorksLikeRealDb()
     {
-        // 1. ابتدا یک استودیو بسازید و ذخیره کنید تا ID بگیرد
+        // 1. First, create and save a studio so it gets an ID
         var studio = new Studio
         {
             Name = "Warner Bros",
             Country = "USA"
         };
         _context.Studios.Add(studio);
-        await _context.SaveChangesAsync(); // این مرحله برای رفع خطای Foreign Key حیاتی است
+        await _context.SaveChangesAsync();
+        // This step is critical to avoid Foreign Key errors
 
-        // 2. حالا فیلم را با استفاده از StudioId معتبر بسازید
+        // 2. Now create the movie using a valid StudioId
         var movie = new Movie
         {
             Title = "Sqlite Test Movie",
             TenantId = 1,
             RowVersion = new byte[8],
             ReleaseDate = DateTime.UtcNow,
-            StudioId = studio.Id, // استفاده از ID استودیویی که در مرحله قبل ذخیره شد
-            MovieDetail = new MovieDetail // اگر MovieDetail اجباری است
+            StudioId = studio.Id, // Use the studio ID saved in the previous step
+            MovieDetail = new MovieDetail // If MovieDetail is required
             {
                 Language = "English",
                 Country = "USA"
             }
         };
 
-        // 3. ذخیره فیلم
+        // 3. Save the movie
         _context.Movies.Add(movie);
         await _context.SaveChangesAsync();
 
