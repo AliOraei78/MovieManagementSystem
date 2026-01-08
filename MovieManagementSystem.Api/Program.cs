@@ -40,8 +40,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "A professional movie management system built with .NET and EF Core",
         Contact = new OpenApiContact
         {
-            Name = "Your Name",
-            Email = "your.email@example.com"
+            Name = "Ali Jenabi",
+            Email = "a.jenabi78@example.com"
         }
     });
 
