@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact
         {
             Name = "Ali Jenabi",
-            Email = "a.jenabi78@example.com"
+            Email = "a.jenabi78@email.com"
         }
     });
 
